@@ -2,7 +2,8 @@ package app
 
 import (
 	"context"
-	"vodeno-task/app/customermailing"
+
+	"github.com/michalsciubidlo/vodeno-task/app/customermailing"
 )
 
 type service interface {
