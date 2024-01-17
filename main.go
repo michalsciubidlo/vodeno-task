@@ -1,6 +1,11 @@
 package main
 
 import (
+	"database/sql"
+	"log"
+
+	_ "github.com/lib/pq"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/michalsciubidlo/vodeno-task/pkg/customermailing"
@@ -15,6 +20,17 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+
+	// DB connection
+	connStr := "host=db user=postgres password=example sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := db.Ping(); err != nil {
+		e.Logger.Fatal("failed to ping DB: " + err.Error())
+	}
 
 	// Initialize service
 	emailService := email.New()

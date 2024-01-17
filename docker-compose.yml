@@ -21,8 +21,12 @@ services:
   db:
     image: postgres:latest
     container_name: postgres_db
+    environment: 
+      POSTGRES_PASSWORD: example-pass
     networks:
       - backend
+    ports:
+      - 5432:5432
 
 networks:
   backend:    

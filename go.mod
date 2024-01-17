@@ -5,6 +5,7 @@ go 1.21.3
 require (
 	github.com/docker/docker v24.0.7+incompatible
 	github.com/labstack/echo/v4 v4.11.4
+	github.com/lib/pq v1.10.9
 	github.com/pkg/errors v0.9.1
 )
 
