@@ -1,9 +1,9 @@
-package customermailing
+package server
 
 import "time"
 
-type Message struct {
-	Email      string
+type MailingMessage struct {
+	Email      string `json:"email"`
 	Title      string
 	Content    string
 	InsertTime time.Time
