@@ -2,10 +2,11 @@
 
 This is an example customer mailing service. 
 It exposes simple REST-like API for adding, deleting and sending emails. 
+It uses postgreSQL as database.
 
 # How to run
 
-docker-compose up 
+`make launch`
 
 # Examples
 
