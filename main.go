@@ -27,7 +27,6 @@ func main() {
 		log.Fatal("failed to create db connection: " + err.Error())
 	}
 	defer db.Close()
-
 	if err := db.Ping(); err != nil {
 		log.Fatal("failed to ping DB" + err.Error())
 	}

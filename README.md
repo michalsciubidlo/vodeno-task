@@ -4,13 +4,20 @@ This is an example customer mailing service.
 It exposes simple REST-like API for adding, deleting and sending emails. 
 It uses postgreSQL as database.
 
-# How to run
+## How to run
 
-`make launch`
+### Running migrations:
+Using: https://github.com/golang-migrate/migrate
 
-# Examples
 
-#### Add new email message:
+`migrate -database postgres://postgres:example@localhost:5432/api?sslmode=disable -path db/migrations up`
+
+### Launch the application & database:
+ `make launch`
+
+## Examples
+
+#### 1. Add new email message:
 `
 curl -X POST localhost:8080/api/messages -H 'Content-Type: application/json' -d '{
     "email": "bozenka.kowalska@example.com",
@@ -21,12 +28,12 @@ curl -X POST localhost:8080/api/messages -H 'Content-Type: application/json' -d 
 }'
 `
 
-#### Deleting all messages older than 5 minutes by mailing id 
+#### 2. Deleting all messages older than 5 minutes by mailing id 
 `
 curl -X DELETE localhost:8080/api/messages/{id}
 `
 
-#### Sending messages (simulated)
+#### 3. Sending messages (simulated)
 `
 curl -X POST localhost:8080/api/messages/send -H 'Content-Type: application/json' -d '{"mailing_id":120}'
 `
