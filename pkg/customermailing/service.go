@@ -31,11 +31,15 @@ func NewService(emailService emailService, storage storage) *Service {
 
 // Add saves a new MailingMessage record
 func (s *Service) Add(ctx context.Context, item MailingMessage) error {
-	item.InsertTime = time.Now()
+	if item.InsertTime.IsZero() {
+		item.InsertTime = time.Now()
+	}
+
 	err := s.storage.Add(ctx, item)
 	if err != nil {
 		return errors.Wrap(err, "failed to add mailing message")
 	}
+
 	return nil
 }
 
@@ -46,6 +50,7 @@ func (s *Service) Delete(ctx context.Context, mailingID int) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to delete messages")
 	}
+
 	return nil
 }
 
