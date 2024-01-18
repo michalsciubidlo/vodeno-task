@@ -11,18 +11,15 @@ services:
       - "8080:8080" 
     restart: unless-stopped
     depends_on: 
-      - db 
-    # environment: 
-      # REDIS_URL: redis:6379    
+      - db  
     networks: 
       - backend
-
-  # Redis Service   
   db:
     image: postgres:latest
     container_name: postgres_db
     environment: 
-      POSTGRES_PASSWORD: example-pass
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     networks:
       - backend
     ports:
