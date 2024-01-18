@@ -1,11 +1,9 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"os"
+	"log"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 
 	"github.com/labstack/echo/v4"
@@ -24,33 +22,21 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// DB connection
-	conn, err := pgx.Connect(context.Background(), "postgres://postgres:example@postgres_db:5432/api")
+	db, err := sqlx.Connect("postgres", "postgres://postgres:example@postgres_db:5432/api?sslmode=disable")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		log.Fatal("failed to create db connection: " + err.Error())
 	}
-	defer conn.Close(context.Background())
+	defer db.Close()
 
-	if err := conn.Ping(context.Background()); err != nil {
-		e.Logger.Fatal("failed to ping DB: " + err.Error())
-	}
-
-	rows, err := conn.Query(context.Background(), "SELECT datname FROM pg_database;")
-	if err != nil {
-		e.Logger.Fatal("failed to query DB: " + err.Error())
-	}
-	for rows.Next() {
-		var str string
-		if err := rows.Scan(&str); err != nil {
-			e.Logger.Fatal("failed to scan row: " + err.Error())
-		}
-		e.Logger.Print("database: " + str)
+	if err := db.Ping(); err != nil {
+		log.Fatal("failed to ping DB" + err.Error())
 	}
 
 	// Initialize service
 	emailService := email.New()
-	service := customermailing.NewService(emailService, customermailing.NewStorage())
+	service := customermailing.NewService(emailService, customermailing.NewStorage(db))
 
+	// Setup api routes
 	server.SetupRoutes(e, service)
 
 	// Start server

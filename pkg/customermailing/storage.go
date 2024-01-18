@@ -4,17 +4,23 @@ import (
 	"context"
 	"fmt"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type Storage struct {
+	db *sqlx.DB
 }
 
-func NewStorage() *Storage {
-	return &Storage{}
+func NewStorage(db *sqlx.DB) *Storage {
+	return &Storage{
+		db: db,
+	}
 }
 
 func (s *Storage) Add(ctx context.Context, msg MailingMessage) error {
-	return fmt.Errorf("storage.Add: not implemented")
+	_, err := s.db.NamedExecContext(ctx, "INSERT INTO mailing_messages(email, title, content, insert_time, mailing_id) VALUES (:email, :title, :content, :insert_time, :mailing_id)", msg)
+	return err
 }
 
 func (s *Storage) DeleteOlderThan(ctx context.Context, t time.Time) error {

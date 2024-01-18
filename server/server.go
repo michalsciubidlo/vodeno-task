@@ -30,7 +30,7 @@ func SetupRoutes(e *echo.Echo, service service) {
 		msg := toCustomerMailingMessage(m)
 		err := service.Add(c.Request().Context(), msg)
 		if err != nil {
-			c.Logger().Error(err.Error())
+			c.Logger().Error("failed to add new mailing message: " + err.Error())
 			return c.String(http.StatusInternalServerError, "something went wrong")
 		}
 		return c.String(http.StatusCreated, "OK")
