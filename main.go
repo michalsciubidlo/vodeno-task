@@ -33,7 +33,7 @@ func main() {
 	}
 
 	// Initialize service
-	emailService := email.New()
+	emailService := email.New(e.Logger)
 	service := customermailing.NewService(emailService, customermailing.NewStorage(db))
 
 	// Setup api routes

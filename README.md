@@ -21,4 +21,11 @@ curl -X POST localhost:8080/api/messages -H 'Content-Type: application/json' -d 
 `
 
 #### Deleting all messages older than 5 minutes by mailing id 
-`curl -X DELETE localhost:8080/api/messages/{id}`
+`
+curl -X DELETE localhost:8080/api/messages/{id}
+`
+
+#### Sending messages (simulated)
+`
+curl -X POST localhost:8080/api/messages/send -H 'Content-Type: application/json' -d '{"mailing_id":120}'
+`

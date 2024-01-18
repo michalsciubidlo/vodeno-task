@@ -2,18 +2,23 @@ package email
 
 import (
 	"context"
-	"fmt"
 	"strings"
+
+	"github.com/labstack/echo"
 )
 
-type MockService struct{}
+type MockService struct {
+	log echo.Logger
+}
 
-func New() *MockService {
-	return &MockService{}
+func New(log echo.Logger) *MockService {
+	return &MockService{
+		log: log,
+	}
 }
 
 // SendEmails mocks sending email and prints the payload
 func (s *MockService) SendEmails(ctx context.Context, title string, content string, email ...string) error {
-	fmt.Printf("sending message to %s:\n[%s]\n%s\n", strings.Join(email, ","), title, content)
+	s.log.Printf("sending message to %s:\n[%s]\n%s\n", strings.Join(email, ","), title, content)
 	return nil
 }

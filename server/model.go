@@ -9,3 +9,7 @@ type MailingMessage struct {
 	InsertTime time.Time `json:"insert_time"`
 	MailingID  int       `json:"mailing_id"`
 }
+
+type MailingIDPayload struct {
+	MailingID int `json:"mailing_id"`
+}

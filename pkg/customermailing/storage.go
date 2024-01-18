@@ -2,7 +2,6 @@ package customermailing
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -23,10 +22,13 @@ func (s *Storage) Add(ctx context.Context, msg MailingMessage) error {
 	return err
 }
 
-func (s *Storage) DeleteOlderThan(ctx context.Context, t time.Time) error {
-	return fmt.Errorf("storage.DeleteOlderThan: not implemented")
+func (s *Storage) DeleteOlderThan(ctx context.Context, mailingID int, olderThan time.Time) error {
+	_, err := s.db.ExecContext(ctx, "DELETE FROM mailing_messages WHERE mailing_id = $1 AND insert_time <= $2", mailingID, olderThan)
+	return err
 }
 
 func (s *Storage) GetMailingMessagesByID(ctx context.Context, id int) ([]MailingMessage, error) {
-	return nil, fmt.Errorf("storage.GetMailingMessagesByID: not implemented")
+	res := []MailingMessage{}
+	err := s.db.SelectContext(ctx, &res, "SELECT email, title, content, insert_time, mailing_id FROM mailing_messages WHERE mailing_id = $1", id)
+	return res, err
 }

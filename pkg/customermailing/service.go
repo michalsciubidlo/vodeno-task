@@ -13,7 +13,7 @@ type emailService interface {
 
 type storage interface {
 	Add(ctx context.Context, item MailingMessage) error
-	DeleteOlderThan(ctx context.Context, t time.Time) error
+	DeleteOlderThan(ctx context.Context, mailingID int, t time.Time) error
 	GetMailingMessagesByID(ctx context.Context, id int) ([]MailingMessage, error)
 }
 
@@ -40,9 +40,9 @@ func (s *Service) Add(ctx context.Context, item MailingMessage) error {
 }
 
 // Delete removes all MailingMessages older than 5 minutes
-func (s *Service) Delete(ctx context.Context) error {
+func (s *Service) Delete(ctx context.Context, mailingID int) error {
 	fiveMinutesAgo := time.Now().Add(-5 * time.Minute)
-	err := s.storage.DeleteOlderThan(ctx, fiveMinutesAgo)
+	err := s.storage.DeleteOlderThan(ctx, mailingID, fiveMinutesAgo)
 	if err != nil {
 		return errors.Wrap(err, "failed to delete messages")
 	}
